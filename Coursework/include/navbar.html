@@ -1,0 +1,68 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+
+<script src="http://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
+<nav class="navbar navbar-light navbar-expand-lg" style="background-color: #e3f2fd;">
+    <a class="navbar-brand" href="home.php">
+        <img src="IMG/logo.svg" width="40" height="40" class="d-inline-block align-top" alt=""> Animal Sanctuary
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="nav navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="home.php">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">About</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="adoption.php">Adoptions</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="manageadoptions.php">My Adoptions</a>
+            </li>
+            <li class="nav-item">
+
+                <?php
+             require_once "config.php"; 
+        //Validate credentials
+   
+        $username = $_SESSION["Username"];        
+        // Prepare a select statement
+        $sql = "SELECT  * FROM registrations WHERE Username = :Username";
+        if($stmt = $pdo->prepare($sql)){
+            // Bind variables to the prepared statement as parameters
+            $stmt->bindParam(":Username", $username, PDO::PARAM_STR);
+            // Attempt to execute the prepared statement
+            if($stmt->execute()){
+               
+                    if($row = $stmt->fetch()){
+                        $admin = $row["Admin"];
+                            //echo $admin . "hello";
+                            if($admin == "1"){
+                                
+                                echo ' <a class="nav-link" href="admin.php">Admin Console</a>';
+                                //header("location: home.php");
+                            }
+                        }
+                    }
+            // Close statement
+            unset($stmt);
+            }
+    // Close connection
+    unset($pdo);
+    ?>
+
+            </li>
+
+            <li class="pb-2">
+                <a href="password-reset.php"><button class="btn btn-danger"style="margin-right: 5px;">Reset Password</button></a>
+            </li>
+            <li>
+                <a href="logout.php"><button class="btn btn-secondary">Logout</button></a>
+            </li>
+        </ul>
+</nav>
